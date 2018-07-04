@@ -22,7 +22,7 @@ public class BFS {
         boolean kunjung;
         List<Node> tetangga;
         
-        // Constructor
+        // Constructor Node
         Node(int data) {
             this.data = data;
             this.tetangga = new ArrayList<>();
@@ -44,17 +44,26 @@ public class BFS {
         }
     }
 	
-    //listtetangga		
-    public bfslisttetangga() {
+    // Constructor BFS		
+    public BFS() {
 	q = new LinkedList<Node>();
     }
 	
-     //bfs
+     // BFS
     public void bfs(Node node) {
     	q.add(node);
-	node.visited=true;
-	    
-	    
-	    
+	node.visited = true;
+	while(!q.isEmpty()) {
+	    Node el = q.remove();
+	    System.out.print(el.data + "t");
+	    List<Node> tetangga = el.getTetangga();
+	    for(int i=0; i<tetangga.size(); i++) {
+		Node n = tetangga.get(i);
+		if(n != null & !n.visited) {
+		    q.add(n);
+	 	    n.visited = true;
+		}
+    	    }
+	}
     }
 }
