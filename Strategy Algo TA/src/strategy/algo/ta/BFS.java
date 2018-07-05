@@ -52,16 +52,16 @@ public class BFS {
      // BFS
     public void bfs(Node node) {
     	q.add(node);
-	node.visited = true;
+	node.kunjung = true;
 	while(!q.isEmpty()) {
 	    Node el = q.remove();
 	    System.out.print(el.data + "t");
 	    List<Node> tetangga = el.getTetangga();
 	    for(int i=0; i<tetangga.size(); i++) {
 		Node n = tetangga.get(i);
-		if(n != null & !n.visited) {
+		if(n != null & !n.kunjung) {
 		    q.add(n);
-	 	    n.visited = true;
+	 	    n.kunjung = true;
 		}
     	    }
 	}
