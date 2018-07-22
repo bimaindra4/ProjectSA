@@ -26,15 +26,20 @@ public class TOH{
  
   public static void main(String args[]) {
     Scanner sc = new Scanner(System.in);
+		
     System.out.print("Masukkan jumlah disk : ");
     int disk = sc.nextInt(); // jumlah disk
-     System.out.print("Masukkan jumlah tiang : ");
+		
+    System.out.print("Masukkan jumlah tiang : ");
     int tiang = sc.nextInt(); // tiang
-    //towers initial config
+		
+    // Konfigurasi tiang awal
     Node source = readPegsConfiguration(tiang, disk, 1); // timpukkan disk dari tiang 1
-    //read target configuration
+		
+    // Konfigurasi tiang target
     Node target = readPegsConfiguration(tiang, disk, tiang); // tumpukkan disk tiang terakhir
-    //To keep track what config we visited and avoid cycles
+		
+    // Proses BFS Minimal Move Target
     Set visited = new HashSet();
     try {
       minMovesToTarget(source, target, visited);
@@ -51,9 +56,10 @@ public class TOH{
     Node current = source;
     while (!q.isEmpty()) {
       current = (Node) q.poll();
-      if (current.equals(target)) { //Node target
-        break;
+      if (current.equals(target)) { // Node target
+        break; // Jika target ketemu, maka berhenti
       }
+			
       List neighbors = current.neighbors();
       if (neighbors.size() > 0) {
         for (Object n : neighbors) {
@@ -64,6 +70,7 @@ public class TOH{
         }
       }
     }
+		
     //Cetak jika tumpukkan disk sesuai dengan node target pada tiang terakhir
     if (current.equals(target)) {
       printOutput(current);
@@ -75,34 +82,39 @@ public class TOH{
     for (int i = 0; i < tiang; i++) {
       initialState[i] = new Stack();
     }
-    //reading and reversing the line as we need to put the elements in decresing size
-    //disc is key and tower is value.
+		
+    // Karena perulangan dimulai dari kecil ke besar, maka dilakukan Collection.reverseOrder untuk membalik value
     TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>(Collections.reverseOrder());
     for (int i = 0; i < disk; i++) {
       map.put(i, sc);
     }
+		
     //prepare towers
     for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
       initialState[entry.getValue() - 1].push(entry.getKey());
     }
+		
     return new Node(initialState);
   }
  
   static void printOutput(Node target) {
-    Stack stack = new Stack<>(); //using stack as we need to print the trail from Source - target config
+		// Print hasil dari BFS
+    Stack stack = new Stack<>();
     while (target.parent != null) {
       stack.add(target.move);
       target = target.parent;
     }
-      System.out.println("Jumlah move yang dibutuhkan : " + stack.size() + "\n");
-      System.out.println("Solve : ");
-    while (!stack.isEmpty()) {
+    
+		System.out.println("Jumlah move yang dibutuhkan : " + stack.size() + "\n");
+    System.out.println("Solve : ");
+    
+		while (!stack.isEmpty()) {
       System.out.println(stack.pop());
     }
   }
  
   static class Node implements Cloneable {
-    //towers
+    // towers
     Stack[] state = null;
     Node parent = null;  //for backtracking trail
     Move move = null; // The move we made to go to next neighbor config
