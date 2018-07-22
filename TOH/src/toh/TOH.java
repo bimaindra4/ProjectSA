@@ -43,7 +43,7 @@ public class TOH{
     }
   }
  
-  private static void minMovesToTarget(Node source, Node target, Set visited) throws CloneNotSupportedException {
+  private static void minMovesToTarget(Node source, Node target, Set visited){
     // BFS queue
     // tambahkan node source ke queue
     Queue q = new LinkedList();
@@ -112,7 +112,7 @@ public class TOH{
     }
  
     @Override
-    protected Node clone() throws CloneNotSupportedException {
+    protected Node clone() {
       Stack[] cloneStacks = new Stack[state.length];
       for (int i = 0; i < state.length; i++) {
         cloneStacks[i] = (Stack) state[i].clone();
@@ -123,7 +123,7 @@ public class TOH{
  
     //returns the neghboring configurations.
     //What all configurations we can get based on current config.
-    public List neighbors() throws CloneNotSupportedException {
+    public List neighbors() {
       List neighbors = new ArrayList<>();
       int k = state.length;
       for (int i = 0; i < k; i++) {
