@@ -48,10 +48,12 @@ public class TOH{
     }
   }
  
-  private static void minMovesToTarget(Node source, Node target, Set visited){
+  private static void minMovesToTarget(Node source, Node target, Set visited) throws CloneNotSupportedException   {
     // BFS queue
     // tambahkan node source ke queue
+    
     Queue q = new LinkedList();
+    
     q.add(source);
     Node current = source;
     while (!q.isEmpty()) {
@@ -105,26 +107,26 @@ public class TOH{
       target = target.parent;
     }
     
-		System.out.println("Jumlah move yang dibutuhkan : " + stack.size() + "\n");
+    System.out.println("Jumlah move yang dibutuhkan : " + stack.size() + "\n");
     System.out.println("Solve : ");
     
-		while (!stack.isEmpty()) {
+    while (!stack.isEmpty()) {
       System.out.println(stack.pop());
     }
   }
  
   static class Node implements Cloneable {
-    // towers
-    Stack[] state = null;
-    Node parent = null;  //for backtracking trail
-    Move move = null; // The move we made to go to next neighbor config
- 
+    // tiang
+    Stack[]state = null;
+    Node parent = null;  //untuk backtracking
+    Move move = null; // untuk bergerak ke tiang lainnya
+   
     public Node(Stack[] st) {
       state = st;
     }
  
     @Override
-    protected Node clone() {
+    protected Node clone() throws CloneNotSupportedException  {
       Stack[] cloneStacks = new Stack[state.length];
       for (int i = 0; i < state.length; i++) {
         cloneStacks[i] = (Stack) state[i].clone();
@@ -135,21 +137,20 @@ public class TOH{
  
     //returns the neghboring configurations.
     //What all configurations we can get based on current config.
-    public List neighbors() {
+    public List neighbors() throws CloneNotSupportedException  {
       List neighbors = new ArrayList<>();
       int k = state.length;
       for (int i = 0; i < k; i++) {
         for (int j = 0; j < k; j++) {
           if (i != j && !state[i].isEmpty()) {
             //Need to clone to avoid change the parent node.
-            //Hint - in java, objects are not mutable and they are references
             Node child = this.clone();
             //make a move
             if (canWeMove(child.state[i], child.state[j])) {
               child.state[j].push(child.state[i].pop());
               //this is required to backtrack the trail once we find the target config
               child.parent = this;
-              //the move we made to get to this neighbor
+              //Menunjukkan perpindahan disk
               child.move = new Move(i, j);
               neighbors.add(child);
             }
@@ -159,19 +160,26 @@ public class TOH{
       return neighbors;
     }
  
-    public boolean canWeMove(Stack fromTower, Stack toTower) {
+    public boolean canWeMove(Stack fromTower, Stack toTower) { // peraturan tower of hanoi
       boolean answer = false;
-      if (toTower.isEmpty()) {// if destination tower is empty, then we can move any disc
+      if (toTower.isEmpty()) {// jika tiang tujuan kosong maka kita bisa menambahkan semabarang disk ke tiang tersebut
         return true;
       }
       int toDisc = (int) toTower.peek();
           int fromDisc = (int) fromTower.peek();
-      if (fromDisc < toDisc) { //we can only place small disc on top
+      if (fromDisc < toDisc) { //hanya dapat meletakkan disk kecil di atas disk yang besar
         answer = true;
       }
       return answer;
     }
  
+    @Override
+    public int hashCode() {
+      int hash = 7;
+      return hash;
+    } 
+
+  
     @Override
     public boolean equals(Object obj) {
       if (obj == null) {
